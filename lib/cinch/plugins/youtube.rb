@@ -9,16 +9,14 @@ module Cinch
 			include Cinch::Plugin
 
 			set :prefix, /!yt /
-			match /(https?:\/\/www.youtube.com\/watch.*[^\s])/, method: :enqueue
-			match 'clear', method: :clear
-			match 'skip', method: :skip
 
 			def initialize(m)
 				super
-				@mpd = Mpd.new(config["address"],config["port"])
+				@mpd = MPD.new(config["address"],config["port"])
 				@queue = Queue.new
 			end
 
+			match /(https?:\/\/www.youtube.com\/watch.*[^\s])/, method: :enqueue
 			def enqueue(m, url)
 				@queue << url
 				playvideo m unless @playing
@@ -47,6 +45,7 @@ module Cinch
 				end
 			end
 
+			match 'skip', method: :skip
 			def skip(m)
 				unless @pid.nil? 
 					# Process.kill("TERM", -Process.getpgid(@pid))
@@ -54,6 +53,7 @@ module Cinch
 				end
 			end
 
+			match 'clear', method: :clear
 			def clear(m)
 				m.reply("Youtube playlist cleared")
 				@queue.clear unless @queue.nil?
