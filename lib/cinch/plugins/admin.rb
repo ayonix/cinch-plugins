@@ -47,9 +47,9 @@ module Cinch
 			def add_admin(m, nick)
 				if m.channel.opped? m.user
 					if @admins[m.channel.name].nil?
-						@admins[m.channel.name] = [m.user.name]
+						@admins[m.channel.name] = [nick]
 					else
-						@admins[m.channel.name] << m.user.name unless @admins[m.channel.name].include? m.user.name
+						@admins[m.channel.name] << nick unless @admins[m.channel.name].include? nick
 					end
 					save
 					m.reply "#{nick} added to aop list for #{m.channel.name}"
