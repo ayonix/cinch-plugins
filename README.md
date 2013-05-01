@@ -6,7 +6,7 @@ Example configuration:
 		dir_mode: normal
 		dir: "/some/user/cinch/"
 	servers:
-		hackint:
+		serverone:
 			server: irc.server.org
 			port: 6667
 			nick: TestBot
