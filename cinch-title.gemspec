@@ -7,5 +7,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Adrian Leva"]
   s.email       = 'adrian.leva@gmail.com'
   s.files       = ["lib/cinch/plugins/title.rb"]
+  s.add_dependency('cinchize')
+  s.add_dependency('nokogiri')
   s.homepage    = ''
 end
