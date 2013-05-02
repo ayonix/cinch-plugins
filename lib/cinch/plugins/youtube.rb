@@ -29,9 +29,8 @@ module Cinch
 
 			def playvideo(m)
 				@playing = true
-				# @pid = Process.spawn("#{settings['player']} $(youtube-dl -g #{@queue.pop})", :pgroup=>true)
 				url = @queue.pop
-				@pid = Process.spawn("#{config["player"]} $(youtube-dl -g #{url})", :out => '/dev/null', :err => '/dev/null')
+				@pid = Process.spawn("#{config["player"]} $(youtube-dl -g #{url})", :out => '/dev/null', :err => '/dev/null', :prgoup => true)
 				mpd_connect
 				@mpd.stop
 				m.reply("Now playing on youtube: #{getTitle(url)}")
@@ -52,10 +51,7 @@ module Cinch
 
 			match 'skip', method: :skip
 			def skip(m)
-				unless @pid.nil? 
-					# Process.kill("TERM", -Process.getpgid(@pid))
-					Process.kill("TERM", @pid)
-				end
+				Process.kill("TERM", -Process.getpgid(@pid)) unless @pid.nil?
 			end
 
 			match 'clear', method: :clear
