@@ -11,6 +11,7 @@ module Cinch
 			def connect_mpd
 				@mpd ||= MPD.new(config["address"],config["port"])
 				@mpd.connect unless @mpd.connected?
+				@mpd.password config["password"] unless config["password"].nil?
 			end
 
 			match /play/, method: :play
