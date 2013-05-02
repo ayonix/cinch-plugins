@@ -30,7 +30,7 @@ module Cinch
 			def playvideo(m)
 				@playing = true
 				url = @queue.pop
-				@pid = Process.spawn("#{config["player"]} $(youtube-dl -g #{url})", :out => '/dev/null', :err => '/dev/null', :prgoup => true)
+				@pid = Process.spawn("#{config["player"]} $(youtube-dl -g #{url})", :out => '/dev/null', :err => '/dev/null', :pgroup => true)
 				mpd_connect
 				@mpd.stop
 				m.reply("Now playing on youtube: #{getTitle(url)}")
