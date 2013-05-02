@@ -30,9 +30,9 @@ module Cinch
 			def volume(m, vol)
 				connect_mpd
 				if vol.nil?
-					@mpd.volume = vol.to_i
-				else
 					m.reply "Volume: #{@mpd.volume}"
+				else
+					@mpd.volume = vol.to_i
 				end
 			end
 
