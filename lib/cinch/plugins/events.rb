@@ -30,12 +30,14 @@ module Cinch
 
 			class Event
 				include DataMapper::Resource
+				DataMapper.setup :default, "sqlite://#{config["db"]}"
 				property :id, Serial
 				property :where, String, required: true
 				property :when, DateTime, required: true
 				property :what, String, required: true
 				property :who, String
-				auto_upgrade!
+				DataMapper.finalize
+				DataMapper.auto_upgrade!
 			end
 		end
 	end
