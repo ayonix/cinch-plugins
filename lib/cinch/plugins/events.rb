@@ -30,7 +30,7 @@ module Cinch
 
 			class Event
 				include DataMapper::Resource
-				DataMapper.setup :default, "sqlite://#{config["db"]}"
+				DataMapper.setup :default, "sqlite://#{Events::config["db"]}"
 				property :id, Serial
 				property :where, String, required: true
 				property :when, DateTime, required: true
