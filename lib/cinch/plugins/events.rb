@@ -11,7 +11,6 @@ module Cinch
 
 			def initialize(m)
 				DataMapper.setup :default, "sqlite://#{config["db"]}"
-				auto_upgrade!
 			end
 
 			match /add (.+),(.+),(.+)/, method: :add
@@ -31,6 +30,7 @@ module Cinch
 
 			class Event
 				include DataMapper::Resource
+				auto_upgrade!
 				property :id, Serial
 				property :where, String, required: true
 				property :when, DateTime, required: true
