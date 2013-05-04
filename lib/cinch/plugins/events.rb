@@ -30,12 +30,12 @@ module Cinch
 
 			class Event
 				include DataMapper::Resource
-				auto_upgrade!
 				property :id, Serial
 				property :where, String, required: true
 				property :when, DateTime, required: true
 				property :what, String, required: true
 				property :who, String
+				auto_upgrade!
 			end
 		end
 	end
