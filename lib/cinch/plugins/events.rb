@@ -1,7 +1,7 @@
 require 'dm-core'  
 require 'dm-timestamps'  
 require 'dm-validations'  
-require 'dm-migration' 
+require 'dm-migrations' 
 
 module Cinch
 	module Plugins
