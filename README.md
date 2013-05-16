@@ -16,23 +16,27 @@ Example configuration:
 				-
 					class: "Cinch::Plugins::Admin"
 					options:
-						file: "/some/user/cinch/db/admins.yml"
+						:path: "/some/user/cinch/db/admins.yml"
+				-
+					class: "Cinch::Plugins::Events"
+					options:
+						:db_path: "/some/user/cinch/db/events.db"
 				-
 					class: "Cinch::Plugins::Frebi"
 					options:
-					  	player: mplayer
+					  	:player: mplayer
 				-
 					class: "Cinch::Plugins::Mpd"
 					options:
-						address: localhost
-						port: 6600
-						password: ''
+						:address: localhost
+						:port: 6600
+						:password: ''
 				-
 					class: "Cinch::Plugins::Title"
 				-
 					class: "Cinch::Plugins::Youtube"
 					options:
-						player: mplayer
-						address: localhost
-						port: 6600
-						password: ''
+						:player: mplayer
+						:address: localhost
+						:port: 6600
+						:password: ''
