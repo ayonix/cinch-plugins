@@ -11,14 +11,14 @@ module Cinch
 			set :prefix, /!yt /
 
 			def initialize(m)
-				super
-				@mpd = MPD.new(config["address"],config["port"])
+				super(m)
+				@mpd = MPD.new(config[:address],config[:port])
 				@queue = Queue.new
 			end
 
 			def mpd_connect
 				@mpd.connect unless @mpd.connected?
-				@mpd.password config["password"] unless config["password"].nil?
+				@mpd.password config[:password] unless config[:password].nil? or config[:password].empty?
 			end
 
 			match /(https?:\/\/www.youtube.com\/watch.*[^\s])/, method: :enqueue
@@ -30,7 +30,7 @@ module Cinch
 			def playvideo(m)
 				@playing = true
 				url = @queue.pop
-				@pid = Process.spawn("#{config["player"]} $(youtube-dl -g #{url})", :out => '/dev/null', :err => '/dev/null', :pgroup => true)
+				@pid = Process.spawn("#{config[:player]} $(youtube-dl -g #{url})", :out => '/dev/null', :err => '/dev/null', :pgroup => true)
 				mpd_connect
 				@mpd.stop
 				m.reply("Now playing on youtube: #{getTitle(url)}")

@@ -6,19 +6,14 @@ module Cinch
 			include Cinch::Plugin
 
 			def initialize(m)
-				super
-				@admins = YAML.load_file(config["file"])
+				super(m)
+				@admins = YAML.load_file(config[:path])
 				@admins ||= Hash.new
 			end
 
-			# aop users that join the channel
 			listen_to :join, method: :op
 			def op(m)
-				if m.channel.opped? m.bot 
-					m.channel.op m.user if not @admins[m.channel.name].nil? and @admins[m.channel.name].include? m.user.name
-				else
-					m.reply "I would have opped you #{m.user.nick} but I have no rights" unless m.user == m.bot
-				end
+				m.channel.op m.user if not @admins[m.channel.name].nil? and @admins[m.channel.name].include? m.user.name
 			end
 
 			# join channels if the bot is invited

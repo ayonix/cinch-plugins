@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'cinch-events'
-  s.version     = '0.0.1'
+  s.version     = '0.0.2'
   s.date        = '2010-04-28'
   s.summary     = "Cinch events"
   s.description = "Eventstuff"
@@ -13,6 +13,6 @@ Gem::Specification.new do |s|
   s.add_dependency('dm-timestamps')
   s.add_dependency('dm-validations')
   s.add_dependency('dm-migrations')
-  s.add_dependency('dm-postgres-adapter')
+  s.add_dependency('dm-sqlite-adapter')
   s.homepage    = ''
 end

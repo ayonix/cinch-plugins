@@ -8,10 +8,14 @@ module Cinch
 			include Cinch::Plugin
 			set :prefix, '!mpd '
 
+			def initialize(m)
+				super(m)
+				@mpd = MPD.new(config[:address],config[:port])
+			end
+
 			def connect_mpd
-				@mpd ||= MPD.new(config["address"],config["port"])
 				@mpd.connect unless @mpd.connected?
-				@mpd.password(config["password"]) unless config["password"].nil? or config["password"].empty?
+				@mpd.password(config[:password]) unless config[:password].nil? or config[:password].empty?
 			end
 
 			match /play/, method: :play

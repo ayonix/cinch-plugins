@@ -5,13 +5,8 @@ module Cinch
 	module Plugins
 		class Frebi
 			include Cinch::Plugin
-
 			set :prefix, /!frebi /
-			@frebi_sounds = {}
-
-			def self.frebi_sounds
-				@frebi_sounds 
-			end
+			@@frebi_sounds = {}
 
 			page = Nokogiri::HTML(open('http://sounds.frebi.org'))
 			# get name, url and trigger
@@ -20,17 +15,17 @@ module Cinch
 				text = button.children.to_s
 				url = page.css('audio').select{|a| a.attributes['id'].value == name}.first.attributes['src'].value
 				url = "http://sounds.frebi.org/#{url}"
-				Frebi::frebi_sounds[text.downcase] = url
+				@@frebi_sounds[text.downcase] = url
 				match Regexp.new("(#{text})",true), use_prefix: false
 			end
 
 			def execute(m, text)
-				`#{config["player"]} #{Frebi::frebi_sounds[text.downcase]}`
+				`#{config[:player]} #{@@frebi_sounds[text.downcase]}`
 			end
 
 			match /help/, method: :help
 			def help(m)
-				m.reply(Frebi::frebi_sounds.keys.join("; "))
+				m.reply(@@frebi_sounds.keys.join("; "))
 			end
 		end
 	end
