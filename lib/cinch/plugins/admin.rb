@@ -36,7 +36,6 @@ module Cinch
 			def invite(m, channel)
 				if m.bot.channels.include? channel
 					ch = m.bot.channels.find{|c| c.name == channel}
-					debug ch.inspect
 					unless ch.nil?
 						ch.invite m.user 
 					end

@@ -11,7 +11,7 @@ module Cinch
 			def connect_mpd
 				@mpd ||= MPD.new(config["address"],config["port"])
 				@mpd.connect unless @mpd.connected?
-				@mpd.password config["password"] unless config["password"].nil?
+				@mpd.password(config["password"]) unless config["password"].nil? or config["password"].empty?
 			end
 
 			match /play/, method: :play
@@ -29,7 +29,7 @@ module Cinch
 			match /volume\s*([0-9]*)/, method: :volume
 			def volume(m, vol)
 				connect_mpd
-				if vol.nil?
+				if vol.empty?
 					m.reply "Volume: #{@mpd.volume}"
 				else
 					@mpd.volume = vol.to_i
