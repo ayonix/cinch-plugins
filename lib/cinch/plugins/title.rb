@@ -6,7 +6,7 @@ module Cinch
 		class Title
 			include Cinch::Plugin
 
-			set :prefix, /^!/
+			set :prefix, ''
 			match /(https?:\/\/[^\s]*)/, method: :getTitle
 
 			def getTitle(m, url)
