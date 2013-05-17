@@ -7,7 +7,7 @@ module Cinch
 			include Cinch::Plugin
 
 			set :prefix, ''
-			match /^[^!]?.*(https?:\/\/[^\s]*)/, method: :getTitle
+			match /^([^!].*)?(?<url>https?:\/\/[^\s]*)/, method: :getTitle
 
 			def getTitle(m, url)
 				page = Nokogiri::HTML(open(url))
