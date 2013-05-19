@@ -40,3 +40,7 @@ Example configuration:
 						:address: localhost
 						:port: 6600
 						:password: ''
+        -
+          class: "Cinch::Plugins::Z0r"
+          options
+            :player: mplayer
