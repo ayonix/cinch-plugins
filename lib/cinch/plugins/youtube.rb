@@ -62,8 +62,12 @@ module Cinch
 			end
 
 			def getTitle(url)
-				page = Nokogiri::HTML(open(url))
-				return page.css('title').text
+				begin
+					page = Nokogiri::HTML(open(url))
+					return page.css('title').text
+				rescue Exception => e
+					""
+				end
 			end
 		end
 	end
