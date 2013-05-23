@@ -21,19 +21,20 @@ module Cinch
 				@mpd.password config[:password] unless config[:password].nil? or config[:password].empty?
 			end
 
-			match /(https?:\/\/www.youtube.com\/watch.*[^\s])/, method: :enqueue
+			match /(https?:\/\/[^\s]*|gvsearch:.*|ytsearch:.*)/, method: :enqueue
 			def enqueue(m, url)
-				@queue << url
+				@queue << url 
 				playvideo m unless @playing
 			end
 
 			def playvideo(m)
 				@playing = true
 				url = @queue.pop
-				@pid = Process.spawn("#{config[:player]} $(youtube-dl -g #{url})", :out => '/dev/null', :err => '/dev/null', :pgroup => true)
+				debug "#{config[:player]} $(youtube-dl -g '#{url}')"
+				@pid = Process.spawn("#{config[:player]} $(youtube-dl -g '#{url}')", :out => '/dev/null', :err => '/dev/null', :pgroup => true)
 				mpd_connect
 				@mpd.stop
-				m.reply("Now playing on youtube: #{getTitle(url)}")
+				m.reply("Now playing: #{getTitle(url)}")
 
 				# thread to wait for the process to exit
 				# play next video in queue or resume mpd
@@ -66,7 +67,7 @@ module Cinch
 					page = Nokogiri::HTML(open(url), nil, 'utf-8')
 					return page.css('title').text
 				rescue Exception => e
-					"404"
+					url	
 				end
 			end
 		end
