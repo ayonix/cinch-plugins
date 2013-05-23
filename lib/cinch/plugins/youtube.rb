@@ -63,10 +63,10 @@ module Cinch
 
 			def getTitle(url)
 				begin
-					page = Nokogiri::HTML(open(url))
+					page = Nokogiri::HTML(open(url), nil, 'utf-8')
 					return page.css('title').text
 				rescue Exception => e
-					""
+					"404"
 				end
 			end
 		end
