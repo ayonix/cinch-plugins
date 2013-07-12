@@ -1,5 +1,4 @@
 require 'open-uri'
-require 'uri'
 require 'nokogiri'
 
 module Cinch
@@ -16,11 +15,11 @@ module Cinch
         titles = []
         urls.each do |url| 
           begin 
-            titles << Nokogiri::HTML(open(url), nil, 'utf-8').css('title').text
+            titles << Nokogiri::HTML(open(url), nil, 'utf-8').title.gsub(/(\r\n?|\n|\t)/, "")
           rescue Exception => e
           end
         end
-        m.reply titles.join(' == ')
+        m.reply titles.join(' || ')
       end
     end
   end
