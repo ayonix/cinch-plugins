@@ -9,6 +9,9 @@ module Cinch
 			include Cinch::Plugin
 
 			set :prefix, /!yt /
+			match 'skip', method: :skip, group: :yt
+			match 'clear', method: :clear, group: :yt
+			match /(.+)/, method: :enqueue, group: :yt
 
 			def initialize(m)
 				super(m)
@@ -18,19 +21,18 @@ module Cinch
 
 			def mpd_connect
 				@mpd.connect unless @mpd.connected?
-				@mpd.password config[:password] unless config[:password].nil? or config[:password].empty?
+				@mpd.password config[:password] unless config[:password].to_s.empty?
 			end
 
-			match /(https?:\/\/[^\s]*|gvsearch:.*|ytsearch:.*)/, method: :enqueue
-			def enqueue(m, url)
-				@queue << url 
+			def enqueue(m, text)
+        urls = URI.extract text
+        urls.each { |url| @queue << url }
 				playvideo m unless @playing
 			end
 
 			def playvideo(m)
 				@playing = true
 				url = @queue.pop
-				debug "#{config[:player]} $(youtube-dl -g '#{url}')"
 				@pid = Process.spawn("#{config[:player]} $(youtube-dl -g '#{url}')", :out => '/dev/null', :err => '/dev/null', :pgroup => true)
 				mpd_connect
 				@mpd.stop
@@ -50,12 +52,10 @@ module Cinch
 				end
 			end
 
-			match 'skip', method: :skip
 			def skip(m)
 				Process.kill("TERM", -Process.getpgid(@pid)) unless @pid.nil?
 			end
 
-			match 'clear', method: :clear
 			def clear(m)
 				m.reply("Youtube playlist cleared")
 				@queue.clear unless @queue.nil?
@@ -65,9 +65,9 @@ module Cinch
 			def getTitle(url)
 				begin
 					page = Nokogiri::HTML(open(url), nil, 'utf-8')
-					return page.css('title').text
+					return page.title.gsub(/(\r\n?|\n|\t)/, "")
 				rescue Exception => e
-					url	
+					"Something..."	
 				end
 			end
 		end

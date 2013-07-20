@@ -10,7 +10,6 @@ module Cinch
 
       match /.*/
       def execute(m)
-        puts m.message
         urls = URI.extract m.message
         titles = []
         urls.each do |url| 
