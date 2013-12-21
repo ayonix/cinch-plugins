@@ -35,8 +35,10 @@ module Cinch
         trap 'INT' do 
           server.shutdown 
         end
-        server.start
 
+        Thread.new do
+          server.start
+        end
       end
     end
   end
