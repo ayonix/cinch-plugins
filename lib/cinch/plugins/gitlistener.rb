@@ -1,5 +1,6 @@
 require 'json'
-require 'socket'
+require 'sinatra'
+require 'time'
 
 module Cinch
   module Plugins
@@ -9,26 +10,28 @@ module Cinch
       def initialize(m)
         super(m)
 
-        server = TCPServer.new config[:port]
-        Thread.new do
-          loop do
-            Thread.start(server.accept) do |client|
-              pw = client.gets.chomp
-              client.close unless pw == config[:password]
+        set :bind, '0.0.0.0'
 
-              data = JSON.parse(client.gets)
-              debug "Data #{data}"
-              client.close
-              data["payload"]["commits"].each do |commit|
-                config[:channels].each do |ch| 
-                  Channel(ch).send "[#{data["payload"]["repository"]["name"]}] #{commit["message"]} (#{commit["author"]["name"]}) am #{commit["timestamp"]}"
-                end
-              end
+        post '/commit/?' do
+          data = JSON.parse(request.env["rack.input"].read)
+
+          repo = data['repository']['name']
+          branch = data['ref'].split('/').last
+          user = data['user_name']
+          commit_count = data['total_commits_count']
+
+          config[:channels].each do |ch| 
+            Channel(ch).send("#{user} pushed #{commit_count} commits to #{repo}/#{branch}:")
+
+            data['commits'].each do |commit|
+              message = commit['message']
+              time = DateTime.strptime(commit['timestamp']).strftime("%a %d.%m. | %H:%M:%S")
+
+              Channel(ch).send("#{message} [#{time}]")
             end
           end
         end
       end
-
     end
   end
 end
