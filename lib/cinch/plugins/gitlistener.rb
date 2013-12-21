@@ -27,7 +27,7 @@ module Cinch
               message = commit['message']
               time = DateTime.strptime(commit['timestamp']).strftime("%a %d.%m. | %H:%M:%S")
 
-              Channel(ch).send("#{message} [#{time}]")
+              Channel(ch).send("[#{time}] #{message}")
             end
           end
         end

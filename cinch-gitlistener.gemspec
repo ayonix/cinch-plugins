@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'cinch-gitlistener'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.date        = '2013-12-21'
   s.summary     = "Cinch Gitlistener"
   s.description = "Listens for post-receive git hooks"
