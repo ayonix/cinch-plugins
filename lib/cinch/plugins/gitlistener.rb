@@ -1,19 +1,19 @@
+require 'webrick'
 require 'json'
-require 'sinatra'
 require 'time'
 
 module Cinch
   module Plugins
-    class GitListener
-
+    class GitListener 
       include Cinch::Plugin
+
       def initialize(m)
         super(m)
 
-        set :bind, '0.0.0.0'
+        server = WEBrick::HTTPServer.new :Port => config[:port]
 
-        post '/commit/?' do
-          data = JSON.parse(request.env["rack.input"].read)
+        server.mount_proc config[:path] do |req, res|
+          data = JSON.parse(req.body)
 
           repo = data['repository']['name']
           branch = data['ref'].split('/').last
@@ -31,6 +31,12 @@ module Cinch
             end
           end
         end
+
+        trap 'INT' do 
+          server.shutdown 
+        end
+        server.start
+
       end
     end
   end
