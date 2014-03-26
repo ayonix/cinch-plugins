@@ -2,7 +2,7 @@ require 'thread'
 
 module Cinch
   module Plugins
-    class Title
+    class Espeak
       include Cinch::Plugin
 
       match /speak (.*)/
