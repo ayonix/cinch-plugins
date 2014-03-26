@@ -1,0 +1,12 @@
+Gem::Specification.new do |s|
+  s.name        = 'cinch-espeak'
+  s.version     = '0.0.1'
+  s.date        = '2014-03-26'
+  s.summary     = "Cinch espeak"
+  s.description = "Speaks stuff"
+  s.authors     = ["Adrian Leva"]
+  s.email       = 'adrian.leva@gmail.com'
+  s.files       = ["lib/cinch/plugins/espeak.rb"]
+  s.add_dependency('cinchize')
+  s.homepage    = ''
+end
