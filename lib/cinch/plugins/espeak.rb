@@ -1,13 +1,12 @@
-require 'thread'
-
 module Cinch
   module Plugins
     class Espeak
       include Cinch::Plugin
 
-      match /speak (.*)/
+      match /speak (.*)$/
       def execute(m, text)
-	spawn("espeak #{text}")
+      	text.gsub!(/;/, '.')
+	spawn("espeak \"#{text}\"")
       end
     end
   end
