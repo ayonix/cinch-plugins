@@ -7,7 +7,7 @@ module Cinch
 
       match /speak (.*)$/
       def execute(m, text)
-	spawn("espeak '#{text}'".shellescape)
+	spawn("espeak #{text.shellescape}")
       end
     end
   end
