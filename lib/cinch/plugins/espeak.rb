@@ -1,3 +1,5 @@
+require 'shellwords'
+
 module Cinch
   module Plugins
     class Espeak
@@ -5,8 +7,7 @@ module Cinch
 
       match /speak (.*)$/
       def execute(m, text)
-      	text.gsub!(/;/, '.')
-	spawn("espeak \"#{text}\"")
+	spawn("espeak '#{text}'".shellescape)
       end
     end
   end
