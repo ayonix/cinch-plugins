@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name        = 'cinch-espeak'
-  s.version     = '0.0.2'
+  s.version     = '0.0.3'
   s.date        = '2014-03-26'
   s.summary     = "Cinch espeak"
   s.description = "Speaks stuff"
