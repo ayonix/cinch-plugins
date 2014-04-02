@@ -84,7 +84,7 @@ module Cinch
 			end
 
 			def parse_time(text)
-				formats = ['%d.%m.%Y', '(%d.%m.%Y)', '%d.%m.%Y)']
+				formats = ['%d.%m.%Y %H%M', '%d.%m.%Y %H:%M', '%d.%m.%Y', '(%d.%m.%Y)', '%d.%m.%Y)']
 				date_strings = text.scan /\d{1,2}.\d{1,2}.\d{4}/
 				date = nil
 				date_strings.any? do |s|
