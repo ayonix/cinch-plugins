@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'cinch-events'
-  s.version     = '0.0.3'
-  s.date        = '2014-04-02'
+  s.version     = '0.0.4'
+  s.date        = '2014-04-03'
   s.summary     = "Cinch events"
   s.description = "Eventstuff"
   s.authors     = ["Adrian Leva"]

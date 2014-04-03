@@ -1,4 +1,5 @@
 require 'data_mapper'  
+require 'time'
 
 module Cinch
 	module Plugins
@@ -64,10 +65,8 @@ module Cinch
 			def list(m)
 				events = Event.available(m.channel.name)
 				if events.size > 0	
-					i = 1
-					events.each do |event|
+					events.each_with_index do |i,event|
 						m.reply("#{i}: #{event}")
-						i+=1
 						m.reply("Dabei: #{event.who}") unless event.who.empty?
 					end
 				else
@@ -85,11 +84,12 @@ module Cinch
 
 			def parse_time(text)
 				formats = ['%d.%m.%Y %H%M', '%d.%m.%Y %H:%M', '%d.%m.%Y', '(%d.%m.%Y)', '%d.%m.%Y)']
-				date_strings = text.scan /\d{1,2}.\d{1,2}.\d{4}/
+				date_strings = text.scan /\d{1,2}.\d{1,2}.\d{4} \d{1,2}:\d{1,2}/
+				date_strings += text.scan /\d{1,2}.\d{1,2}.\d{4}/
 				date = nil
 				date_strings.any? do |s|
 					formats.any? do |format|
-						date = DateTime.strptime(s,format) rescue nil
+						date = Time.strptime(s,format).to_time.localtime rescue nil
 					end
 				end
 				return date
@@ -98,7 +98,7 @@ module Cinch
 			class Event
 				include DataMapper::Resource
 				property :id, Serial
-				property :when, DateTime
+				property :when, Time 
 				property :what, String, required: true, :message => "Das Event braucht ein 'was'"
 				property :who, String, :default => ""
 				property :creator, String
@@ -108,7 +108,7 @@ module Cinch
 				validates_with_method :when, :method => :check_date
 
 				def self.available(channel)
-					Event.all(:when.gte => DateTime.now, :order => [:when.asc], :channel => channel)
+					return Event.all(:when.gte => Time.now, :order => [:when.asc], :channel => channel)
 				end
 
 				def attend(nick)
@@ -143,8 +143,10 @@ module Cinch
 
 				private 
 				def check_date
+					puts "#{self.when} vs. #{Time.now}"
+					puts self.when - Time.now
 					return [false,'Das Event braucht ein Datum dd.mm.yyyy [hh:mm]'] if self.when.nil?
-					return self.when - DateTime.now > 0 ? true : [false,'Das Event war also schon?']
+					return self.when - Time.now > 0 ? true : [false,'Das Event war also schon?']
 				end
 			end
 		end
