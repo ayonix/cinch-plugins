@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'cinch-youtube'
-  s.version     = '0.0.2'
-  s.date        = '2013-07-20'
+  s.version     = '0.0.3'
+  s.date        = '2014-05-09'
   s.summary     = "Cinch youtube"
   s.description = "Youtube"
   s.authors     = ["Adrian Leva"]

@@ -25,15 +25,15 @@ module Cinch
 			end
 
 			def enqueue(m, text)
-        urls = URI.extract text
-        urls.each { |url| @queue << url }
+				urls = URI.extract text
+				urls.each { |url| @queue << url }
 				playvideo m unless @playing
 			end
 
 			def playvideo(m)
 				@playing = true
 				url = @queue.pop
-				@pid = Process.spawn("#{config[:player]} $(youtube-dl -g '#{url}')", :out => '/dev/null', :err => '/dev/null', :pgroup => true)
+				@pid = Process.spawn("#{config[:player]} $(youtube-dl -g '#{url}')", :out => '/dev/null', :err => '/dev/null')
 				mpd_connect
 				@mpd.stop
 				m.reply("Now playing: #{getTitle(url)}")
