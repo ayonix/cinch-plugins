@@ -1,5 +1,3 @@
-# This plugin requires youtube-dl to be in your path
-require 'thread'
 require 'nokogiri'
 require 'open-uri'
 
@@ -15,13 +13,7 @@ module Cinch
 
 			def initialize(m)
 				super(m)
-				@mpd = MPD.new(config[:address],config[:port])
 				@queue = Queue.new
-			end
-
-			def mpd_connect
-				@mpd.connect unless @mpd.connected?
-				@mpd.password config[:password] unless config[:password].to_s.empty?
 			end
 
 			def enqueue(m, text)
@@ -33,20 +25,16 @@ module Cinch
 			def playvideo(m)
 				@playing = true
 				url = @queue.pop
-				@pid = Process.spawn("#{config[:player]} $(youtube-dl -g '#{url}')", :out => '/dev/null', :err => '/dev/null', :pgroup => true)
-				mpd_connect
-				@mpd.stop
+				@pid = Process.spawn("#{config[:player]} #{url}", :pgroup => true)
 				m.reply("Now playing: #{getTitle(url)}")
 
 				# thread to wait for the process to exit
-				# play next video in queue or resume mpd
+				# play next video in queue
 				Process.wait(@pid)
 				@playing = false
 				if @queue.empty?
 					@pid = nil
 					GC.start
-					mpd_connect
-					@mpd.play
 				else
 					playvideo m
 				end
@@ -67,7 +55,7 @@ module Cinch
 					page = Nokogiri::HTML(open(url), nil, 'utf-8')
 					return page.title.gsub(/(\r\n?|\n|\t)/, "")
 				rescue Exception => e
-					"Something..."	
+					"Something..."
 				end
 			end
 		end
