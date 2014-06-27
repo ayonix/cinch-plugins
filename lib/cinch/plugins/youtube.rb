@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+require 'shellwords'
 
 module Cinch
 	module Plugins
@@ -25,7 +26,8 @@ module Cinch
 			def playvideo(m)
 				@playing = true
 				url = @queue.pop
-				@pid = Process.spawn("#{config[:player]} #{url}", :pgroup => true)
+				cmd = "#{config[:player]} #{url.shellescape}"
+				@pid = Process.spawn(cmd, :pgroup => true)
 				m.reply("Now playing: #{getTitle(url)}")
 
 				# thread to wait for the process to exit
