@@ -21,13 +21,11 @@ module Cinch
           commit_count = data['total_commits_count']
 
           config[:channels].each do |ch| 
-            Channel(ch).send("#{user} pushed #{commit_count} commits to #{repo}/#{branch}:")
-
             data['commits'].each do |commit|
               message = commit['message']
               time = DateTime.strptime(commit['timestamp']).strftime("%a %d.%m. | %H:%M:%S")
 
-              Channel(ch).send("[#{time}] #{message}")
+              Channel(ch).send("[#{time} | #{repo}/#{branch}] #{user}: #{message}")
             end
           end
         end
